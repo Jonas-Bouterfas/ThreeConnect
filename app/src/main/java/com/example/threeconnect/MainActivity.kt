@@ -1,5 +1,7 @@
 package com.example.threeconnect
 
+
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,15 +16,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObjects
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import com.example.threeconnect.ui.theme.ThreeConnectTheme
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.toObjects
+
 
 data class Player(
     val playerId: String = "",
@@ -48,7 +51,7 @@ fun MainScreen() {
     val db = Firebase.firestore
     val playerList = MutableStateFlow<List<Player>>(emptyList())
 
-    db.collection("players")
+    db.collection("Players")
         .addSnapshotListener{ value, error ->
             if (error != null) {
                 return@addSnapshotListener
@@ -65,15 +68,19 @@ fun MainScreen() {
             items(players) { player ->
 
                 ListItem(
-                    headlineText = {
+                    overlineContent = {
+                        Text("Invitation Status: ${player.invitation}")
+
+                    },
+                    headlineContent = {
                         Text("Name: ${player.name}")
                     },
-                    supportingText  = {
+                    supportingContent  = {
                         Text("Score: ${player.score}")
                     },
                     trailingContent = {
                         Button(onClick = {
-                            val query = db.collection("players").whereEqualTo("playerId", player.playerId)
+                            val query = db.collection("Players").whereEqualTo("playerId", player.playerId)
 
                             query.get().addOnSuccessListener { querySnapshot ->
                                 for (documentSnapshot in querySnapshot) {
