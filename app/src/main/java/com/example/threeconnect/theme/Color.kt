@@ -1,4 +1,4 @@
-package com.example.threeconnect.ui.theme
+package com.example.threeconnect.theme
 
 import androidx.compose.ui.graphics.Color
 

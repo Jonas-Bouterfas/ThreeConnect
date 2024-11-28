@@ -1,4 +1,4 @@
-package com.example.threeconnect.ui.theme
+package com.example.threeconnect.theme
 
 import android.app.Activity
 import android.os.Build

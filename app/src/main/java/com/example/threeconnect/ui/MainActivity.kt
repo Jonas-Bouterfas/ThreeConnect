@@ -1,4 +1,4 @@
-package com.example.threeconnect
+package com.example.threeconnect.ui
 
 
 
@@ -16,15 +16,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import com.example.threeconnect.ui.theme.ThreeConnectTheme
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.firestore.toObjects
+import com.example.threeconnect.model.Player
+import com.example.threeconnect.theme.ThreeConnectTheme
 
 
 data class Player(
