@@ -132,7 +132,7 @@ fun GameScreen(navController: NavController, model: GameModel, gameId: String?) 
         }
     } else {
         Log.e(
-            "RobinError",
+            "Error",
             "Error Game not found: $gameId"
         )
         navController.navigate("lobby")

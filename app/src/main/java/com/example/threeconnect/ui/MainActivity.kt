@@ -25,12 +25,13 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.firestore.toObjects
 import com.example.threeconnect.model.Player
 import com.example.threeconnect.theme.ThreeConnectTheme
-
+import com.google.firebase.FirebaseApp
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
         setContent {
             ThreeConnectTheme {
                 MainScreen()

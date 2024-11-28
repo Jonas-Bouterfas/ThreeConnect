@@ -28,13 +28,42 @@ fun LobbyScreen(navController: NavController, model: GameModel) {
 
     LaunchedEffect(games) {
         games.forEach { (gameId, game) ->
-            // TODO: Popup with accept invite?
-            if ((game.player1Id == model.localPlayerId.value || game.player2Id == model.localPlayerId.value)
+            if (game.gameState == "invite") {
+                // Show the accept/decline popup
+                ShowAcceptInviteDialog(
+                    gameId = gameId,
+                    onAccept = {
+                        // Update the game state to "player1_turn" (or any other state based on your logic)
+                        model.db.collection("games").document(gameId)
+                            .update("gameState", "player1_turn")
+                            .addOnSuccessListener {
+                                // Navigate to the game screen
+                                navController.navigate("game/$gameId")
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.e("Error", "Error accepting invite: ${exception.message}")
+                            }
+                    },
+                    onDecline = {
+                        // You can either update the game state to "declined" or just dismiss the popup.
+                        // Here, we'll log the decline action.
+                        Log.d("Game", "Invitation declined")
+                        // You could also update the game state to "declined" if needed.
+                        model.db.collection("games").document(gameId)
+                            .update("gameState", "declined")
+                            .addOnFailureListener { exception ->
+                                Log.e("Error", "Error declining invite: ${exception.message}")
+                            }
+                    }
+                )
+            } else if ((game.player1Id == model.localPlayerId.value || game.player2Id == model.localPlayerId.value)
                 && (game.gameState == "player1_turn" || game.gameState == "player2_turn")) {
+                // If the game is in progress, navigate directly to the game screen
                 navController.navigate("game/${gameId}")
             }
         }
     }
+
 
     var playerName = "Unknown?"
     players[model.localPlayerId.value]?.let {
@@ -72,7 +101,7 @@ fun LobbyScreen(navController: NavController, model: GameModel) {
                                             }
                                             .addOnFailureListener {
                                                 Log.e(
-                                                    "RobinError",
+                                                    "Error",
                                                     "Error updating game: $gameId"
                                                 )
                                             }
@@ -91,7 +120,8 @@ fun LobbyScreen(navController: NavController, model: GameModel) {
                                             player2Id = documentId)
                                         )
                                         .addOnSuccessListener { documentRef ->
-                                            // TODO: Navigate?
+                                            // Navigate to the game screen after a successful game creation
+                                            navController.navigate("game/${documentRef.id}")
                                         }
                                 }) {
                                     Text("Challenge")
@@ -103,4 +133,31 @@ fun LobbyScreen(navController: NavController, model: GameModel) {
             }
         }
     }
+}
+
+@Composable
+fun ShowAcceptInviteDialog(
+    gameId: String,
+    onAccept: () -> Unit,
+    onDecline: () -> Unit
+) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = { onDecline() }, // Dismiss the dialog if the user taps outside
+        title = {
+            Text(text = "Game Invitation")
+        },
+        text = {
+            Text("Do you want to accept the game invite?")
+        },
+        confirmButton = {
+            Button(onClick = onAccept) {
+                Text("Accept")
+            }
+        },
+        dismissButton = {
+            Button(onClick = onDecline) {
+                Text("Decline")
+            }
+        }
+    )
 }

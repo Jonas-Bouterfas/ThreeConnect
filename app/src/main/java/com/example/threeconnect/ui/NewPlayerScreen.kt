@@ -50,7 +50,7 @@ fun NewPlayerScreen(navController: NavController, model: GameModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Welcome to Robins TicTacToe!")
+            Text("Welcome to Jonas TicTacToe!")
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -80,7 +80,7 @@ fun NewPlayerScreen(navController: NavController, model: GameModel) {
                             model.localPlayerId.value = newPlayerId
                             navController.navigate("lobby")
                         }.addOnFailureListener { error ->
-                            Log.e("RobinError", "Error creating player: ${error.message}")
+                            Log.e("Error", "Error creating player: ${error.message}")
                         }
                 } },
                 modifier = Modifier.fillMaxWidth()
