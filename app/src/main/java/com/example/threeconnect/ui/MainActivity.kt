@@ -27,12 +27,7 @@ import com.example.threeconnect.model.Player
 import com.example.threeconnect.theme.ThreeConnectTheme
 
 
-data class Player(
-    val playerId: String = "",
-    var name: String = "",
-    var invitation: String = "",
-    var score: Int = 0
-)
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
